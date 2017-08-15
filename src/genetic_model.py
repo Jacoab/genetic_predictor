@@ -1,6 +1,10 @@
+import collections
 import random
+import numpy as np
 
 from src import data_loader as loader
+from src import data_proc as proc
+
 
 """Initial population state info"""
 TRAINING_FILE = "Reviews.csv"
@@ -15,18 +19,9 @@ MAX_INDIVIDUAL_SIZE = [len(batch_individuals) for batch_individuals in UNIQUE_TR
 individuals = UNIQUE_TRAINING_INDIVIDUALS[random.randint(0, len(UNIQUE_TRAINING_INDIVIDUALS))]
 
 
-def _initialize_population(training_batches, unique_training_individuals, max_individual_size,
-                           min_individual_size=1):
-    class Population(object):
-        pass
+NAMED_TUPLE_PARAMS = "training_batches, unique_training_individuals, max_individual_size, min_individual_size"
+Population = collections.namedtuple("Populations", NAMED_TUPLE_PARAMS)
 
-    pop = Population()
-    pop.training_batches = training_batches
-    pop.unique_training_individuals = unique_training_individuals
-    pop.max_individual_size = max_individual_size
-    pop.min_individual_size = min_individual_size
-
-    return pop
 
 
 def train_model(training_file, mutation_rate):
@@ -40,4 +35,10 @@ def train_model(training_file, mutation_rate):
     :param mutation_rate: rate at which that parents are mutated during breeding
     :return: the genetic model data that has been cleaned and formatted
     """
-    init_pop = _initialize_population(TRAINING_BATCHES, UNIQUE_TRAINING_INDIVIDUALS, MAX_INDIVIDUAL_SIZE)
+    prev_word_array = np.array()
+    init_pop = Population(training_batches=TRAINING_BATCHES,
+                          unique_training_individuals=UNIQUE_TRAINING_INDIVIDUALS,
+                          max_individual_size=MAX_INDIVIDUAL_SIZE,
+                          min_individual_size=1)
+    pop_dist = proc.get_population_prob_dist(init_pop.unique_training_individuals,
+                                             prev_word_array, init_pop.training_batches)

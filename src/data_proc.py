@@ -1,3 +1,9 @@
+#
+# Programmed by: Jake Jongewaard
+#
+# Provides routines for processing data and gathering useful
+#
+
 import collections
 import operator
 import random
