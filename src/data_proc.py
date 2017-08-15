@@ -2,7 +2,9 @@
 # Programmed by: Jake Jongewaard
 #
 # Provides routines for processing data and gathering useful
-#
+# statistics.
+#==============================================================
+
 
 import collections
 import operator
@@ -15,7 +17,23 @@ from src import data_loader as loader
 
 
 def get_population_prob_dist(population, prev_word_array, review_batch):
+    """
+    Calculates the distribution of the probabilities of each word in the population
+    occuring after the previous words that have been generated.
+
+    :param population: Array of words that represents the individuals of a population
+    :param prev_word_array: All of the previous words that have been generated
+    :param review_batch: The batch of reviews that is being used to calculate the dist.
+    :return: The probability distribution of the population
+    """
     def prob_of_next_word(next_word):
+        """
+        Calculates the probability of of a given word occuring after the previously
+        generated words.
+
+        :param next_word: Word to calculate the probability of
+        :return: The probability of next_word occuring after the previously generated words
+        """
         compare_phrase = np.append(prev_word_array, next_word)
         resized_batch = np.resize(review_batch, (len(compare_phrase)))
         count = 0
@@ -36,10 +54,12 @@ def get_population_prob_dist(population, prev_word_array, review_batch):
 
 def get_expected_prob_dist(prev_word_array, review_batch):
     """
+    Calculate the distribution of probabilities of all the unique words found in the review_batch
+    occuring after the previously generated words.
 
-    :param prev_word_array:
-    :param review_batch:
-    :return:
+    :param prev_word_array: Previously generated words
+    :param review_batch: Batch of reviews used to calculate the distribution
+    :return: Expected probability distribution found in the review batch
     """
     prob_dist = {}
     all_words = loader.get_all_words(review_batch)
