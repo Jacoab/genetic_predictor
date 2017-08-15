@@ -27,7 +27,7 @@ def read_reviews(filename):
 
     with open(filename, 'rb') as reviews_csv:
         reader = csv.reader(reviews_csv)
-        for row in reader:  #possibly use a range without a count
+        for row in reader:
             batch_buff = np.array()
 
             if count % BATCH_SIZE is 0:
@@ -41,20 +41,31 @@ def read_reviews(filename):
 
 
 def get_all_words(review_batch):
+    """
+    Break reviews into a numpy array of individual words
+
+    :param review_batch: numpy array holding a Batch of review strings
+    :return: Individual review strings
+    """
     delim = ' '
     word_array = np.array()
-    count = 0
+    start_index = 0
     delim_index = 0
+
+    """
+    Iterate through each character in each review until the delimiter
+    is reached. Once the delimiter is reached, append the word given at
+    start_index to delim_index-1
+    """
     for review in review_batch:
-        for char in review:
+        for i in range(0, len(review) - 1):
 
-            if char == delim:
-                delim_index = count + 1
-                np.append(word_array, review[delim_index+1:(delim_index+1)+count])
-            else:
-                count += 1
+            if review[i] == delim:
+                delim_index = i
+                np.append(word_array, review[start_index:delim_index-1])
+                start_index = i + 1
 
-        count = 0
+        start_index = 0
         delim_index = 0
 
     return word_array
