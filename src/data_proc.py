@@ -79,21 +79,25 @@ def get_expected_prob_dist(prev_word_array, review_batch):
 
 def calc_substring_freq_dist(population_dist, target_dist, substring_size):
     """
+    Calculate the frequency distribution of random substrings taken from the
+    population frequency distribution of size substring_size. The random substring
+    frequency distribution is found by taking the probability of that substring occuring
+    in the target frequency distribution.
 
-
-    :param population_dist:
-    :param substring_size:
-    :return:
+    :param population_dist: A population probability distribution using get_population_prob_dist
+    :param target_dist: The target distribution calculated with get_expected_prob_dist
+    :param substring_size: Size of the substrings
+    :return: The frequency distribution of random substrings from population_dist in target_dist
     """
     begin = 0
     end = substring_size - 1
 
     def get_comparison_substrings(substring_array, min_num_substrings=round(len(population_dist))):
         """
+        Get random substrings of size substring_size from the subtring_array.
 
-        :param substring_array:
-        :param min_num_substrings:
-        :return:
+        :param substring_array: Array that will hold substrings used for comparison
+        :param min_num_substrings: The minimum number of substrings to get
         """
         for individual in population_dist:
             rand_index = random.randint(0, len(population_dist) - end)
