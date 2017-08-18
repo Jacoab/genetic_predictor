@@ -9,9 +9,11 @@
 
 import csv
 import numpy as np
+import pandas as pd
 
 
-BATCH_SIZE = 250
+BATCH_SIZE = 50000
+TOTAL_TRAINING_SIZE = 500000
 
 
 def read_reviews(filename):
@@ -22,22 +24,12 @@ def read_reviews(filename):
     :param filename:
     :return: 2-dimensional numpy array that holds each batch of reviews
     """
-    batches = np.array()
-    count = 0
+    review_csv = pd.read_csv(filename)
+    review_array = np.array(review_csv.Text)
+    trimmed_review_array = review_array[0:500000]
 
-    with open(filename, 'rb') as reviews_csv:
-        reader = csv.reader(reviews_csv)
-        for row in reader:
-            batch_buff = np.array()
-
-            if count % BATCH_SIZE is 0:
-                np.append(batches, batch_buff)
-            else:
-                np.append(batch_buff, row[9])
-
-            count += 1
-
-    return batches
+    review_batches = np.split(trimmed_review_array, 10)
+    return review_batches
 
 
 def get_all_words(review_batch):
