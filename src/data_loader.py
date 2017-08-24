@@ -40,7 +40,7 @@ def get_all_words(review_batch):
     :return: Individual review strings
     """
     delim = ' '
-    word_array = np.array()
+    word_list = []
     start_index = 0
     delim_index = 0
 
@@ -50,17 +50,17 @@ def get_all_words(review_batch):
     start_index to delim_index-1
     """
     for review in review_batch:
-        for i in range(0, len(review) - 1):
+        for i in range(0, len(review)):
 
             if review[i] == delim:
                 delim_index = i
-                np.append(word_array, review[start_index:delim_index-1])
+                word_list.append(review[start_index:delim_index])
                 start_index = i + 1
 
         start_index = 0
         delim_index = 0
 
-    return word_array
+    return np.array(word_list)
 
 
 

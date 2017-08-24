@@ -13,5 +13,17 @@ REVIEW_FILE = "Reviews.csv"
 
 print("Beginning unit tests of data_loader.py...")
 
+
 """ read_reviews(filename) test """
-print(loader.read_reviews(REVIEW_FILE)[4][4])
+print("  Testing read_reviews(filename) function with input of " + REVIEW_FILE)
+review_batches = loader.read_reviews(REVIEW_FILE)
+print("  ", end="  ")
+print(review_batches, end="")
+
+
+""" get_all_words(review_batch) test """
+print("  Testing get_all_words(review_batch) function with input of review_batches")
+all_words = loader.get_all_words(review_batches[0])
+
+for i in range(0, len(all_words)-1):
+    print(all_words[i])
