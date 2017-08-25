@@ -4,6 +4,8 @@
 # Unit test for the utilities provided in the data_loader.py file
 #===================================================================
 
+import multiprocessing as mp
+import numpy as np
 
 from src import data_loader as loader
 
@@ -23,7 +25,8 @@ print(review_batches, end="")
 
 """ get_all_words(review_batch) test """
 print("  Testing get_all_words(review_batch) function with input of review_batches")
-all_words = loader.get_all_words(review_batches[0])
+print(loader.get_word_batches(review_batches[0], 10))
 
-for i in range(0, len(all_words)-1):
-    print(all_words[i])
+
+# for i in range(0, len(all_words)-1):
+#     print(all_words[i])

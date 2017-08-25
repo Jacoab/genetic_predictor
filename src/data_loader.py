@@ -4,10 +4,8 @@
 #================================================================
 
 
-#TODO: implement multithreading for reading and reformating
-
-
 import csv
+import multiprocessing as mp
 import numpy as np
 import pandas as pd
 
@@ -32,24 +30,20 @@ def read_reviews(filename):
     return review_batches
 
 
-def get_all_words(review_batch):
-    """
-    Break reviews into a numpy array of individual words
-
-    :param review_batch: numpy array holding a Batch of review strings
-    :return: Individual review strings
-    """
-    delim = ' '
-    word_list = []
-    start_index = 0
-    delim_index = 0
-
+def _read_subbatch_words(subbatch):
     """
     Iterate through each character in each review until the delimiter
     is reached. Once the delimiter is reached, append the word given at
     start_index to delim_index-1
+
+    :param subbatch: subbatch of reviews to read from
+    :return: A list of individual words in the subbatch
     """
-    for review in review_batch:
+    start_index = 0
+    word_list = []
+    delim = ' '
+
+    for review in subbatch:
         for i in range(0, len(review)):
 
             if review[i] == delim:
@@ -58,11 +52,20 @@ def get_all_words(review_batch):
                 start_index = i + 1
 
         start_index = 0
-        delim_index = 0
 
-    return np.array(word_list)
-
+    return word_list
 
 
+def get_word_batches(batch, num_of_subbatches):
+    """
+    Convenience method for reading multiple subbatches of a
+    batch in multiple processes in order to speed up reading.
 
+    :param batch: Batch to read from
+    :param num_of_subbatches: Number of subbatches to be used
+    :return: List batches of individual words
+    """
+    subbatches = np.split(batch, num_of_subbatches)
 
+    pool = mp.Pool(num_of_subbatches)
+    return pool.map(_read_subbatch_words, subbatches)
