@@ -65,10 +65,9 @@ def get_words(batch, num_of_subbatches):
     :param num_of_subbatches: Number of subbatches to be used
     :return: List batches of individual words
     """
-    # sorted(batch, key=str.lower)
     subbatches = np.split(batch, num_of_subbatches)
 
     pool = mp.Pool(num_of_subbatches)
     word_batches = pool.map(_read_subbatch_words, subbatches)
     word_list = [word for batch in word_batches for word in batch]
-    return word_list
+    return list(set(word_list))
