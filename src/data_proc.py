@@ -18,11 +18,11 @@ from src import data_loader as loader
 
 def _prob_of_next_word(next_word, prev_word_array, review_batch):
     """
-    Calculates the probability of of a given word occuring after the previously
+    Calculates the probability of of a given word occurring after the previously
     generated words.
 
     :param next_word: Word to calculate the probability of
-    :return: The probability of next_word occuring after the previously generated words
+    :return: The probability of next_word occurring after the previously generated words
     """
     compare_phrase = np.append(prev_word_array, next_word)
     resized_batch = np.resize(review_batch, (len(compare_phrase)))
@@ -38,7 +38,7 @@ def _prob_of_next_word(next_word, prev_word_array, review_batch):
 def get_population_prob_dist(population, prev_word_array, review_batch):
     """
     Calculates the distribution of the probabilities of each word in the population
-    occuring after the previous words that have been generated.
+    occurring after the previous words that have been generated.
 
     :param population: Array of words that represents the individuals of a population
     :param prev_word_array: All of the previous words that have been generated
@@ -56,14 +56,14 @@ def get_population_prob_dist(population, prev_word_array, review_batch):
 def get_expected_prob_dist(prev_word_array, review_batch):
     """
     Calculate the distribution of probabilities of all the unique words found in the review_batch
-    occuring after the previously generated words.
+    occurring after the previously generated words.
 
     :param prev_word_array: Previously generated words
     :param review_batch: Batch of reviews used to calculate the distribution
     :return: Expected probability distribution found in the review batch
     """
     prob_dist = {}
-    all_words = loader.get_all_words(review_batch)
+    all_words = loader.get_words(review_batch)
     all_words_ = list(map(lambda x: len(x), all_words))
     sorted_words = all_words[np.argsort(all_words)]
 
@@ -81,7 +81,7 @@ def calc_substring_freq_dist(population_dist, target_dist, substring_size):
     """
     Calculate the frequency distribution of random substrings taken from the
     population frequency distribution of size substring_size. The random substring
-    frequency distribution is found by taking the probability of that substring occuring
+    frequency distribution is found by taking the probability of that substring occurring
     in the target frequency distribution.
 
     :param population_dist: A population probability distribution using get_population_prob_dist
@@ -94,7 +94,7 @@ def calc_substring_freq_dist(population_dist, target_dist, substring_size):
 
     def get_comparison_substrings(substring_array, min_num_substrings=round(len(population_dist))):
         """
-        Get random substrings of size substring_size from the subtring_array.
+        Get random substrings of size substring_size from the substring_array.
 
         :param substring_array: Array that will hold substrings used for comparison
         :param min_num_substrings: The minimum number of substrings to get
